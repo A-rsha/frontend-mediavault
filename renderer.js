@@ -1,5 +1,5 @@
 const axios = require("axios");
-
+const BASE_URL = "https://mediaupload-backend.onrender.com";
 async function uploadFile() {
   const file = document.getElementById("fileInput").files[0];
 
@@ -11,7 +11,7 @@ async function uploadFile() {
   const formData = new FormData();
   formData.append("file", file);
 
-  await axios.post("http://localhost:5000/upload", formData);
+  await axios.post(`${BASE_URL}/upload`, formData);
   alert("Uploaded Successfully");
   loadMedia();
 }
