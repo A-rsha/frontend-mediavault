@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MediaVault</title>
+
+   <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #3a77d2;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h2 {
+      color: #333;
+    }
+      input {
+      margin: 10px;
+      background-color: rgb(231, 212, 187);
+      border-radius: 3px;
+      padding-left: 8px;
+    }
+
+    button {
+      padding: 8px 15px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+     button:hover {
+      background: #45a049;
+    }
+
+    #mediaList {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    img, video {
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+</style>
+</head>
+<body>
+
+<h2>MediaVault - Upload Photo/Video</h2>
+<div>
+
+<input type="file" id="fileInput"><br>
+<button onclick="uploadFile()">Upload</button>
+
+<h3>Uploaded Files</h3>
+<div id="mediaList"></div>
+</div>
+
+<script>
+async function uploadFile() {
+  const file = document.getElementById("fileInput").files[0];
+
+  if (!file) {
+    alert("Select file first");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = async function () {
+    const base64 = reader.result;
+
+    await fetch("http://localhost:5000/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: file.name,
+        type: file.type,
+        data: base64
+      })
+    });
+
+    alert("Uploaded Successfully");
+    loadMedia();
+  };
+
+  reader.readAsDataURL(file);
+}
+
+async function loadMedia() {
+  const res = await fetch("http://localhost:5000/media");
+  const data = await res.json();
+
+  const mediaList = document.getElementById("mediaList");
+  mediaList.innerHTML = "";
+
+  data.forEach(item => {
+    if (item.type.startsWith("image")) {
+      mediaList.innerHTML += `
+        <img src="${item.data}" width="150">
+      `;
+    } else {
+      mediaList.innerHTML += `
+        <video width="200" controls>
+          <source src="${item.data}">
+        </video>
+      `;
+    }
+  });
+}
+
+loadMedia();
+</script>
+
+</body>
+</html>
