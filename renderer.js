@@ -17,19 +17,19 @@ async function uploadFile() {
 }
 
 async function loadMedia() {
-  const res = await axios.get("http://localhost:5000/media");
+  const res = await axios.get(`${BASE_URL}/media`);
   const mediaList = document.getElementById("mediaList");
   mediaList.innerHTML = "";
 
   res.data.forEach(item => {
     if (item.type.startsWith("image")) {
       mediaList.innerHTML += `
-        <img src="http://localhost:5000/uploads/${item.filepath}" width="150">
+        <img src="${BASE_URL}/uploads/${item.filepath}" width="150">
       `;
     } else {
       mediaList.innerHTML += `
         <video width="200" controls>
-          <source src="http://localhost:5000/uploads/${item.filepath}">
+          <source src="${BASE_URL}/uploads/${item.filepath}">
         </video>
       `;
     }
