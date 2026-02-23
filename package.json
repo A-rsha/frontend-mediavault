@@ -7,17 +7,9 @@
     "build": "electron-builder"
   },
   "devDependencies": {
-    "electron": "^40.6.0",
-    "electron-builder": "^26.8.1"
+    "electron": "^40.6.0"
   },
-  "build": {
-    "appId": "com.mediavault.app",
-    "productName": "mediavault",
-    "executableName": "mediavault",
-    "win": {
-      "target": "nsis"
-    }
-  },
+  
   "description": "",
   "dependencies": {
     "boolean": "^3.2.0",
